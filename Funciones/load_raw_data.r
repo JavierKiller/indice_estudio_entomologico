@@ -4,7 +4,7 @@ colt = list(
     Jurisdiccion = "f",
     Localidad = "f",
     Sector = "f",
-    Fecha_de_Inicio = "D",
+    Fecha_de_Inicio = col_date(format = "%d/%m/%Y"),
     Semana_Epidemiologica = "f"
     #Recipientes_Tratables = "i",
     #Recipientes_Controlables = "i" ,

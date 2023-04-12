@@ -23,7 +23,7 @@ col_select <- c("Tipo de Estudio",
 
 
 df <- load_raw_data(path, col_name = col_select)
-g_tr_sector <- bar_trs(df,  "Sector")
+g_tr_sector <- bar_trs(df,  "Fecha_de_Inicio" )
 
 #df1 <-change_type_data(df)
 
