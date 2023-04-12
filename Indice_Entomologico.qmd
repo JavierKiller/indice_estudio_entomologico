@@ -1,0 +1,42 @@
+---
+title: "Indice_Entomologico"
+author: "Javier Verdugo"
+format: html
+editor: visual
+---
+Cargar librerias 
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+cargar base de datos de Estudio entomologico solo las columnas para analisis de 
+la tipologia de recipiente positivo
+```{r}
+#df <- read.csv(file = "01enero/DescargaEntomologicoe26_10(1).txt",
+#header = TRUE, sep = "\t", fileEncoding = 'utf-16')
+#head(df)
+
+
+dftr <- read_delim("01enero/DescargaEntomologicoe26_10(1).txt", 
+                 delim  = "\t", col_select = c("Tipo de Estudio",
+                                               "Jurisdiccion", "Localidad",
+                                               "Sector", "Fecha de Inicio",
+                                               "Semana Epidemiologica",
+                                               "Recipientes Tratables",
+                                               "Recipientes Controlables",
+                                               "Recipientes Eliminables"),
+                 locale = locale(encoding = "UTF-16" ))
+head(dftr)
+```
+
+h Recipientes.Tratables Recipientes.Controlables Recipientes.Eliminables 
+Total.de.Recipientes.Positivos
+<int>
+
+```{r}
+group_by(Tipo.de.Estudio)
+
+```
+
+
