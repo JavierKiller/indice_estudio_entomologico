@@ -1,12 +1,11 @@
 
-
 bar_trs <- function(dft, var){
   
   dfts <- dft %>% 
     filter(Recipientes_Tratables != 0 |
              Recipientes_Controlables != 0 |
              Recipientes_Eliminables !=0) %>%
-    group_by_('Tipo_de_Estudio', var) %>% 
+    group_by(Tipo_de_Estudio, !!sym(var)) %>% 
     summarise(Recipientes_Tratables,  Recipientes_Controlables, 
               Recipientes_Eliminables) %>%
     mutate(Pct_Recipientes_Tratables = Recipientes_Tratables/ 
@@ -19,8 +18,7 @@ bar_trs <- function(dft, var){
              Recipientes_Tratables + Recipientes_Controlables + 
                Recipientes_Eliminables)*100) 
   
-  print(names(dfts)) # Verificar nombres de columnas
-  print(dfts) # Verificar datos
+  #  print(names(dfts)) # Verificar nombres de columnas
   
   bar_tr_plot <- ggplot(data = dfts) + 
     geom_bar(
@@ -39,16 +37,16 @@ bar_trs <- function(dft, var){
       position = "dodge", 
       width = 0.2) +
     scale_x_discrete(labels = c("Recipientes 
-                                Tratables", 
+                                Tratables",
                                 "Recipientes 
                                 Controlables", 
                                 "Recipientes 
-                                Eliminables"), 
+                                Eliminables"),
                      limits = c("", "1", "2")) +
     labs(x = "", y = "Porcentaje", fill = "Tipo de Estudio") +
-    facet_wrap( eval(substitute(var)), ncol = 3)
+    facet_wrap(as.name(var), ncol = 3)
   print(bar_tr_plot)
   
-  ggsave("G_bar.jpg", plot = bar_tr_plot, width = 10, height = 8, dpi = 300)
+  ggsave("gg_bar.jpg", plot = bar_tr_plot, width = 10, height = 8, dpi = 300)
   return(bar_tr_plot)
 }
