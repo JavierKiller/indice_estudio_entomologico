@@ -31,7 +31,7 @@
 
 load_raw_data <- function(
     path,
-    path_out = "qr.csv",
+    path_out = "../data/qr.csv",
     col_name = c(
       "Tipo de Estudio",
       "Jurisdiccion",
@@ -60,16 +60,34 @@ load_raw_data <- function(
     
     locale = locale(encoding = "UTF-16" )
   )
+  # Eliminar los espacios en el nombre de las columnas y remplasarlos por _
   colnames(dftr) <- 
     str_replace_all(colnames(dftr), pattern = " ", replacement = "_")
   
+  
+  # Crear dos nuevas columnas separando la variable de la columna original por un guión
+  dftr <- dftr %>%
+    separate(Localidad, into = c("clave_Localidad", "Localidad"), sep = " ")
+  
+  
+  
   write.csv(dftr, path_out, row.names=FALSE)
   
+  # limpiar los datos de la columna Localidad
+#  dftr %>%
+#    separate(Localidad, intro = c("Localidad", "clave_localidad"),
+#             sep = "_", convert =TRUE)
+    
+    
   dftr1 <- read_csv(
-    "qr.csv",
+    path_out,
       col_types = colt,
   )
   write.csv(dftr1, path_out, row.names=FALSE)
   
   return(dftr1)
 } 
+
+
+
+#str_replace_all("030 Hermosillo", pattern = "0|1|2|3|4|5|6|7|8|9| ", replacement = '')
