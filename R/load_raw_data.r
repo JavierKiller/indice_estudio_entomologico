@@ -38,12 +38,30 @@ load_raw_data <- function(
       "Localidad",
       "Sector",
       "Fecha de Inicio",
-      "Semana Epidemiologica"
+      "Semana Epidemiologica",
+      "Casas Revisadas",
+      "Casas Positivas",
+      "Total de Recipientes con Agua" ,
+      "Total de Recipientes Positivos"
     )
 ){
-  colt = list(
+  dftr <- read_tsv(
+    path,
+    col_select = col_name, 
+    locale = locale(encoding = "UTF-16" )
+  )
+  
+  # Eliminar los espacios en el nombre de las columnas y remplasarlos por _
+  colnames(dftr) <- 
+    str_replace_all(colnames(dftr), pattern = " ", replacement = "_")
+  # Crear dos nuevas columnas separando la variable de la columna original por un guión
+  dftr <- dftr %>%
+    separate(Localidad, into = c("clave_Localidad", "Localidad"), sep = " ")
+  
+    colt = list(
     Tipo_de_Estudio = col_factor(c("Encuesta", "Verificacion")),
     Jurisdiccion = "f",
+    clave_Localidad = "f",
     Localidad = "f",
     Sector = "f",
     Fecha_de_Inicio = col_date(format = "%d/%m/%Y"),
@@ -54,40 +72,19 @@ load_raw_data <- function(
     Total_de_Recipientes_Positivos = "d"
     
   )
-  dftr <- read_tsv(
-    path,
-    col_select = col_name, 
-    
-    locale = locale(encoding = "UTF-16" )
-  )
-  # Eliminar los espacios en el nombre de las columnas y remplasarlos por _
-  colnames(dftr) <- 
-    str_replace_all(colnames(dftr), pattern = " ", replacement = "_")
-  
-  
-  # Crear dos nuevas columnas separando la variable de la columna original por un guión
-  dftr <- dftr %>%
-    separate(Localidad, into = c("clave_Localidad", "Localidad"), sep = " ")
   
   
   
-  write.csv(dftr, path_out, row.names=FALSE)
+  write_csv(dftr, path_out)
   
-  # limpiar los datos de la columna Localidad
-#  dftr %>%
-#    separate(Localidad, intro = c("Localidad", "clave_localidad"),
-#             sep = "_", convert =TRUE)
-    
-    
+ 
+
   dftr1 <- read_csv(
     path_out,
       col_types = colt,
   )
-  write.csv(dftr1, path_out, row.names=FALSE)
+  write_csv(dftr1, path_out)
   
   return(dftr1)
 } 
 
-
-
-#str_replace_all("030 Hermosillo", pattern = "0|1|2|3|4|5|6|7|8|9| ", replacement = '')
